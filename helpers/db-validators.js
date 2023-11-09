@@ -4,8 +4,10 @@ const Usuario = require('../models/usuario');
 const esRoleValido = async(rol = '') => {
 
     const existeRol = await Role.findOne({ rol });
+    const rolesValidos= await Usuario.schema.path('rol').enumValues;
+
     if ( !existeRol ) {
-        throw new Error(`El rol ${ rol } no está registrado en la BD`);
+        throw new Error(`El rol {${ rol }} no está registrado en la BD, Roles permitidos: ${rolesValidos}`);
     }
 }
 

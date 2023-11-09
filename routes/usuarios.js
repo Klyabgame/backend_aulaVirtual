@@ -1,4 +1,3 @@
-
 const { Router } = require('express');
 const { check } = require('express-validator');
 
@@ -8,7 +7,6 @@ const {
     esAdminRole,
     tieneRole
 } = require('../middlewares');
-
 
 const { esRoleValido, emailExiste, existeUsuarioPorId } = require('../helpers/db-validators');
 
@@ -50,9 +48,6 @@ router.delete('/:id',[
 ],usuariosDelete );
 
 router.patch('/', usuariosPatch );
-
-
-
 
 
 module.exports = router;
