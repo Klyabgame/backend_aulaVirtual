@@ -13,7 +13,8 @@ class Server {
         this.authPath     = '/api/auth'; */
         this.path={
             usuariosPath:'/api/usuarios',
-            authPath:'/api/auth'
+            authPath:'/api/auth',
+            uploader:'/api/uploader'
         }
 
         // Conectar a base de datos
@@ -48,6 +49,7 @@ class Server {
         
         this.app.use( this.path.authPath, require('../routes/auth'));
         this.app.use( this.path.usuariosPath, require('../routes/usuarios'));
+        this.app.use( this.path.uploader, require('../routes/uploader'));
     }
 
     listen() {
