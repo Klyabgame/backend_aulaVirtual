@@ -42,7 +42,7 @@ const uploaderImage =async(req=request,res=response)=>{
     const {secure_url}=await cloudinary.uploader.upload(tempFilePath);
 
     model.img=secure_url;
-    model.save();
+    await model.save();
 
     res.json({
         mod:model
