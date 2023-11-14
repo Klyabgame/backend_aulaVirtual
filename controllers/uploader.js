@@ -1,18 +1,13 @@
-const { response, request } = require("express")
-const { v4: uuidv4 } = require('uuid');
-const cloudinary = require('cloudinary').v2
+const { response, request } = require("express");
+const cloudinary = require('cloudinary').v2;
 
 const Usuario=require('../models/usuario');
 
-
-const extensionesValidas=['jpg','png,PNG,GIF,TIFF,PSD,RAW'];
-
-const coleccionesPermitidas=[
-    'usuarios'
-]
-
 const uploaderImage =async(req=request,res=response)=>{
+    res.json({ msg:"uploaderImage"})
+}
 
+const updateImage=async(req=request,res=response)=>{
     const {coleccion,id}=req.params;
     let model;
     switch (coleccion) {
@@ -27,16 +22,22 @@ const uploaderImage =async(req=request,res=response)=>{
     
         default:
             return res.status(400).json({
-                msg:'no se encontraron en las colecciones'
+                msg:'coleccion no valida'
             })
     }
 
-    const {name,tempFilePath}=req.files.archivo
+    //borrar imagenes repetidas
+    if (model.img) {
+        //borrar la imagen del servidor
+        const nombreArr=model.img.split('/');
+        const nombre=nombreArr[nombreArr.length - 1];
+        const [img_id]=nombre.split('.');
+        await cloudinary.uploader.destroy(img_id);
+    
+      }
 
-    const nameArray=name.split('.');
-    const nameImg=uuidv4();
-    const nameType=nameArray[nameArray.length-1];
-    const urlImg=nameImg+'.'+nameType;
+
+    const {tempFilePath}=req.files.archivo
 
     //const algo=archivo.join(__dirname,'../uploader',urlImg);
     const {secure_url}=await cloudinary.uploader.upload(tempFilePath);
@@ -48,9 +49,9 @@ const uploaderImage =async(req=request,res=response)=>{
         mod:model
     })
 
-
 }
 
 module.exports={
-    uploaderImage
+    uploaderImage,
+    updateImage
 }

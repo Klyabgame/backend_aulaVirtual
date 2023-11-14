@@ -1,16 +1,17 @@
 const { Router } = require('express');
 const { check } = require('express-validator');
-const { uploaderImage } = require('../controllers/uploader');
-const { validarCampos } = require('../middlewares');
+const { uploaderImage, updateImage } = require('../controllers/uploader');
+const { validarCampos, validarJWT } = require('../middlewares');
 
 
 
 const router = Router();
 
-router.post('/:coleccion/:id',[
+router.put('/:coleccion/:id',[
+    validarJWT,
     check('id','tiene que ser un id de mongo valido').isMongoId(),
     validarCampos
-],uploaderImage);
+],updateImage);
 
 
 
